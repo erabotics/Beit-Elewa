@@ -253,6 +253,7 @@ footer p{margin:0;opacity:.7;font-size:14px}
 .combo-row{display:flex;gap:8px}
 .combo-row select{flex:1;min-width:0;font:inherit;padding:8px 10px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}
 .combo-row .btn{padding:8px 14px;font-size:14px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .back{background:none;border:0;color:var(--muted);font-weight:600;padding:0}
 .wa{background:#1FAF5A;color:#fff}
 

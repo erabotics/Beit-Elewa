@@ -69,9 +69,9 @@ const MENU = {
   water:    { name: 'مياه',              price: 10 },
 };
 
-// كومبو (بطاطس + كانز) بـ 45 مع كل برجر أو بانيه — واحد لكل ساندوتش.
+// كومبو (بطاطس + كانز) بـ 45 مع أي ساندوتش — واحد لكل ساندوتش.
 const COMBO_PRICE = 45;
-const COMBO_FOR = ['burger', 'panne'];
+const COMBO_FOR = ['kebda', 'khalta', 'sharqy', 'sharqyc', 'mda5n', 'panne', 'burger', 'sakalans'];
 ['pepsi', '7up', 'mirinda', 'vcola', 'vdiet', 'v7lemon'].forEach(function (id) {
   MENU['combo_' + id] = { name: 'كومبو: بطاطس + ' + MENU[id].name, price: COMBO_PRICE, combo: true };
 });
@@ -116,7 +116,10 @@ function doPost(e) {
     const raw = (e && e.postData && e.postData.contents) || '';
     if (raw.length > 6000) return json_({ ok: false, error: 'TOO_LARGE' });
 
-    const order = validate_(JSON.parse(raw));
+    const body = JSON.parse(raw);
+    // Honeypot: a hidden form field that only spam bots fill. Answer "ok" so they don't retry, but save nothing.
+    if (body && body.website) return json_({ ok: true });
+    const order = validate_(body);
     const cache = CacheService.getScriptCache();
 
     // One request at a time, so two orders arriving together never overwrite each other
@@ -234,7 +237,7 @@ function price_(o) {
     discount += Math.max(0, units[i] + units[i + 1] + units[i + 2] - OFFER_TOTAL);
   }
 
-  // Add-ons need their main item: 1 extra patty per burger, 1 combo per burger/panne.
+  // Add-ons need their main item: 1 extra patty per burger, 1 combo per sandwich.
   const qty = {};
   o.items.forEach(function (it) { qty[it.id] = it.qty; });
   const combos = o.items.filter(function (it) { return MENU[it.id].combo; })
@@ -245,7 +248,7 @@ function price_(o) {
   const sandwiches = ['kebda', 'khalta', 'sharqy', 'sharqyc', 'mda5n', 'panne', 'burger']
     .reduce(function (s, id) { return s + (qty[id] || 0); }, 0);
   if ((qty.cheese || 0) > sandwiches) warnings.push('جبنة زيادة أكتر من عدد السندوتشات');
-  if (combos > mains) warnings.push('كومبو أكتر من عدد البرجر والبانيه');
+  if (combos > mains) warnings.push('كومبو أكتر من عدد السندوتشات');
 
   const fee = o.mode === 'pickup' ? 0 : DELIVERY_ZONES[o.area];
   return {

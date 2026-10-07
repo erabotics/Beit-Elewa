@@ -338,6 +338,6 @@ insert into public.products (id, name, category, price_egp, offer_eligible, stoc
   ('combo_vdiet',   'كومبو: بطاطس + في كولا دايت',    'addon', 45, false, null),
   ('combo_v7lemon', 'كومبو: بطاطس + في ٧ ليمون نعناع', 'addon', 45, false, null)
 on conflict (id) do nothing;
--- Note: "1 extra patty per burger / 1 combo per burger or panne" is enforced by the
+-- Note: "1 extra patty per burger / 1 combo per sandwich" is enforced by the
 -- website and flagged by the Google Sheets script; add a check here if you move to Supabase.
 -- Drinks start at stock 0: set real counts from the admin side before going live.

@@ -21,18 +21,18 @@ const ITEMS=[
  {id:'pickles',cat:'sides',name:'مخلل',desc:'مخلل بلدي',price:10,img:'bw-pickles',side:1},
  {id:'tomato',cat:'sides',name:'طماطم متبلة',desc:'طماطم متبلة بالتوابل والكزبرة',price:15,img:'bw-tomato',side:1},
  // drinks & snacks — prices are placeholders until the restaurant confirms them
- {id:'pepsi',cat:'drinks',name:'بيبسي',desc:'كانز ساقع',price:20,img:'pepsi',side:1,drink:1},
- {id:'7up',cat:'drinks',name:'سفن أب',desc:'كانز ساقع',price:20,img:'7up',side:1,drink:1},
+ {id:'pepsi',cat:'drinks',name:'بيبسي',desc:'كانز ساقع',price:20,img:'pepsi-wood',side:1,drink:1},
+ {id:'7up',cat:'drinks',name:'سفن أب',desc:'كانز ساقع',price:20,img:'7up-wood',side:1,drink:1},
  {id:'mirinda',cat:'drinks',name:'ميرندا برتقال',desc:'كانز ساقع',price:20,art:['can','#F26A10','#1E9E3A','#FFF1E6'],side:1,drink:1},
- {id:'vcola',cat:'drinks',name:'في كولا',desc:'كانز ساقع',price:20,img:'vcola',side:1,drink:1},
- {id:'vdiet',cat:'drinks',name:'في كولا دايت',desc:'كانز ساقع — بدون سكر',price:20,img:'vcola-diet',side:1,drink:1},
- {id:'v7lemon',cat:'drinks',name:'في ٧ ليمون نعناع',desc:'كانز ساقع بقطع الليمون',price:20,img:'v7-lemon',side:1,drink:1},
- {id:'juice',cat:'drinks',name:'عصير جهينة برتقال',desc:'علبة ٢٣٥ مل ساقعة',price:15,img:'juice',side:1,drink:1},
- {id:'water',cat:'drinks',name:'مياه',desc:'مياه معدنية اكوا دلتا',price:10,img:'water',side:1,drink:1},
- {id:'chipsy',cat:'drinks',name:'شيبسي',desc:'شطة حارة وليمون',price:15,img:'chipsy',side:1,drink:1},
+ {id:'vcola',cat:'drinks',name:'في كولا',desc:'كانز ساقع',price:20,img:'vcola-wood',side:1,drink:1},
+ {id:'vdiet',cat:'drinks',name:'في كولا دايت',desc:'كانز ساقع — بدون سكر',price:20,img:'vcola-diet-wood',side:1,drink:1},
+ {id:'v7lemon',cat:'drinks',name:'في ٧ ليمون نعناع',desc:'كانز ساقع بقطع الليمون',price:20,img:'v7-lemon-wood',side:1,drink:1},
+ {id:'juice',cat:'drinks',name:'عصير جهينة برتقال',desc:'علبة ٢٣٥ مل ساقعة',price:15,img:'juice-wood',side:1,drink:1},
+ {id:'water',cat:'drinks',name:'مياه',desc:'مياه معدنية اكوا دلتا',price:10,img:'water-wood',side:1,drink:1},
+ {id:'chipsy',cat:'drinks',name:'شيبسي',desc:'شطة حارة وليمون',price:15,img:'chipsy-wood',side:1,drink:1},
 ];
-// Combo: fries + a can for each burger or panne, picked in the cart.
-const COMBO_PRICE=45, COMBO_FOR=['burger','panne'];
+// Combo: fries + a can for each sandwich, picked in the cart.
+const COMBO_PRICE=45, COMBO_FOR=['kebda','khalta','sharqy','sharqyc','mda5n','panne','burger','sakalans'];
 ITEMS.filter(i=>i.drink&&/كانز/.test(i.desc)).forEach(d=>ITEMS.push({id:'combo_'+d.id,cat:'addon',name:'كومبو: بطاطس + '+d.name,desc:'بطاطس + '+d.name,price:COMBO_PRICE,img:'bw-fries',side:1,hidden:1,combo:1,drinkName:d.name}));
 function artSrc([k,c1,c2,bg]){
   const shadow='<ellipse cx="100" cy="176" rx="46" ry="7" fill="#000" opacity=".12"/>';
@@ -130,15 +130,15 @@ $('#qvAdd').onclick=()=>{setQty(qvItem.id,(cart[qvItem.id]||0)+qvQty);
   closeLayers();toast(`اتضاف ${qvItem.name} للسلة`)};
 
 // cart drawer
-const form={mode:'delivery',name:'',phone:'',area:Object.keys(ZONES)[0],address:'',floor:'',notes:''};
+const form={website:'',mode:'delivery',name:'',phone:'',area:Object.keys(ZONES)[0],address:'',floor:'',notes:''};
 function modeHTML(){return `<div class="seg" role="radiogroup" aria-label="طريقة الاستلام">
   <button type="button" role="radio" data-mode="delivery" aria-checked="${form.mode==='delivery'}">توصيل</button>
   <button type="button" role="radio" data-mode="pickup" aria-checked="${form.mode==='pickup'}">استلام من الفرع</button></div>`}
 function comboHTML(){const mains=COMBO_FOR.reduce((s,id)=>s+(cart[id]||0),0); if(!mains)return '';
   const combos=ITEMS.filter(i=>i.combo), used=combos.reduce((s,i)=>s+(cart[i.id]||0),0);
-  return `<div class="combo"><div><b>خليها كومبو بـ ${ar(COMBO_PRICE)} ج</b><span>بطاطس + مشروب ساقع مع كل برجر أو بانيه · ${ar(used)} من ${ar(mains)}</span></div>
+  return `<div class="combo"><div><b>خليها كومبو بـ ${ar(COMBO_PRICE)} ج</b><span>بطاطس + مشروب ساقع مع كل ساندوتش · ${ar(used)} من ${ar(mains)}</span></div>
   ${used<mains?`<div class="combo-row"><select id="comboDrink" aria-label="اختار المشروب">${combos.map(c=>`<option value="${c.id}">${c.drinkName}</option>`).join('')}</select><button class="btn btn-red" id="addCombo" type="button">+ ضيف كومبو</button></div>`
-    :'<span class="ok">✓ كل البرجر والبانيه بقوا كومبو</span>'}</div>`}
+    :'<span class="ok">✓ كل السندوتشات بقت كومبو</span>'}</div>`}
 function lineHTML(k,q){const i=BY[k];return `<div class="line"><img src="${i.src}" alt=""><div><b>${i.name}</b><span class="num">${ar(i.price)} ج × ${ar(q)}</span></div>
   <div class="stepper" data-id="${k}"><button data-act="dec" aria-label="أقل">−</button><output class="num">${ar(q)}</output><button data-act="inc" aria-label="أكتر">+</button></div></div>`}
 function totalsHTML(t){return `<div class="tot"><span>المجموع</span><span class="num">${ar(t.sub)} ج</span></div>
@@ -151,7 +151,7 @@ let orderId=null, loggedId=null;
 function newOrderId(){const d=new Date(),p=n=>String(n).padStart(2,'0');
   return `BE-${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}-${Math.random().toString(36).slice(2,6).toUpperCase().padEnd(4,'0')}`}
 function logOrder(t){
-  if(!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(SHEETS_URL)||!orderId||loggedId===orderId)return;
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(SHEETS_URL)||!orderId||loggedId===orderId||form.website)return;
   loggedId=orderId;
   const pk=form.mode==='pickup';
   const payload={orderId,mode:form.mode,name:form.name.trim(),phone:form.phone.replace(/\D/g,''),
@@ -188,13 +188,14 @@ function renderDrawer(){
     B.innerHTML=`<button class="back" id="back">→ رجوع للسلة</button>
      <div style="margin-top:14px">${modeHTML()}</div>
      <form id="coForm" novalidate style="margin-top:14px">
-      <div class="field"><label for="f-name">الاسم</label><input id="f-name" name="name" autocomplete="name" value="${esc(form.name)}"><span class="err">اكتب اسمك</span></div>
-      <div class="field"><label for="f-phone">رقم الموبايل</label><input id="f-phone" name="phone" inputmode="tel" autocomplete="tel" placeholder="01xxxxxxxxx" value="${esc(form.phone)}" dir="ltr" style="text-align:right"><span class="err">اكتب رقم موبايل مصري من ١١ رقم يبدأ بـ 01</span></div>
+      <div class="field"><label for="f-name">الاسم</label><input id="f-name" name="name" autocomplete="name" maxlength="60" value="${esc(form.name)}"><span class="err">اكتب اسمك</span></div>
+      <div class="field"><label for="f-phone">رقم الموبايل</label><input id="f-phone" name="phone" inputmode="tel" autocomplete="tel" maxlength="15" placeholder="01xxxxxxxxx" value="${esc(form.phone)}" dir="ltr" style="text-align:right"><span class="err">اكتب رقم موبايل مصري من ١١ رقم يبدأ بـ 01</span></div>
       ${pk?`<div class="pay" style="margin-bottom:14px"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg> هتستلم من الفرع: ${BRANCH}</div>`:`
       <div class="field"><label for="f-area">المنطقة</label><select id="f-area" name="area">${Object.entries(ZONES).map(([z,f])=>`<option value="${z}"${form.area===z?' selected':''}>${z} — توصيل ${f} ج</option>`).join('')}</select></div>
-      <div class="field"><label for="f-address">العنوان بالتفصيل</label><input id="f-address" name="address" placeholder="مثال: ٢٥ شارع سعد زغلول، عمارة ٤" value="${esc(form.address)}"><span class="err">اكتب العنوان عشان الطيار يوصلك</span></div>
-      <div class="field"><label for="f-floor">الدور / الشقة</label><input id="f-floor" name="floor" placeholder="مثال: الدور ٣ شقة ٦" value="${esc(form.floor)}"></div>`}
-      <div class="field"><label for="f-notes">ملاحظات على الطلب</label><textarea id="f-notes" name="notes" rows="2" placeholder="مثال: بدون كاتشاب، حراق زيادة">${esc(form.notes)}</textarea></div>
+      <div class="field"><label for="f-address">العنوان بالتفصيل</label><input id="f-address" name="address" maxlength="200" placeholder="مثال: ٢٥ شارع سعد زغلول، عمارة ٤" value="${esc(form.address)}"><span class="err">اكتب العنوان عشان الطيار يوصلك</span></div>
+      <div class="field"><label for="f-floor">الدور / الشقة</label><input id="f-floor" name="floor" maxlength="60" placeholder="مثال: الدور ٣ شقة ٦" value="${esc(form.floor)}"></div>`}
+      <div class="field"><label for="f-notes">ملاحظات على الطلب</label><textarea id="f-notes" name="notes" rows="2" maxlength="300" placeholder="مثال: بدون كاتشاب، حراق زيادة">${esc(form.notes)}</textarea></div>
+      <div class="hp" aria-hidden="true"><label for="f-website">Website</label><input id="f-website" name="website" tabindex="-1" autocomplete="off"></div>
       <div class="pay"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg> الدفع كاش عند الاستلام</div>
      </form>`;
     F.innerHTML=totalsHTML(t)+`<button class="btn btn-red" type="submit" form="coForm">راجع الطلب</button>`;
