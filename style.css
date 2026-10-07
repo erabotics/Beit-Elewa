@@ -253,6 +253,15 @@ footer p{margin:0;opacity:.7;font-size:14px}
 .combo-row{display:flex;gap:8px}
 .combo-row select{flex:1;min-width:0;font:inherit;padding:8px 10px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}
 .combo-row .btn{padding:8px 14px;font-size:14px}
+.social{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.soc{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:999px;background:var(--card);box-shadow:var(--shadow);text-decoration:none;font-weight:700;color:var(--ink);transition:transform .2s}
+.soc:hover{transform:translateY(-2px)}
+.soc .icon{color:var(--red)}
+.soc small{color:var(--muted);font-weight:600;direction:ltr}
+.mnav .soc{font-family:var(--body);font-size:15px;padding:10px 16px;align-self:flex-start}
+.foot-soc{display:flex;gap:10px}
+.foot-soc a{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);color:var(--cream);transition:background .2s}
+.foot-soc a:hover{background:var(--flame);color:#fff}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .back{background:none;border:0;color:var(--muted);font-weight:600;padding:0}
 .wa{background:#1FAF5A;color:#fff}
