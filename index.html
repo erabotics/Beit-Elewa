@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://script.google.com https://script.googleusercontent.com; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src https://script.google.com https://script.googleusercontent.com; frame-src 'none'; worker-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
+<style>html:not(.unframed){visibility:hidden}</style>
+<script src="guard.js"></script>
 <title>بيت عليوه — سندوتشات على أصولها</title>
 <meta name="description" content="بيت عليوه: كبدة اسكندراني، سجق، بانيه وبرجر في زهراء مدينة نصر. اطلب أونلاين توصيل أو استلام من الفرع.">
 <meta name="theme-color" content="#2B2B2B">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap">
+<link rel="preload" href="fonts/cairo-arabic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="icon" type="image/png" href="img/logo.png">
 <link rel="apple-touch-icon" href="img/logo.png">
 <link rel="stylesheet" href="style.css">
@@ -106,8 +106,10 @@
   <div class="about-img"><img src="img/kebda-v2.jpg" alt="سندوتش كبدة اسكندراني" loading="lazy"></div>
   <div>
     <div class="kicker">عن بيت عليوه</div>
-    <h2>أكل الشارع اللي بتحبه، بنضافة البيت</h2>
-    <p>من الحي العاشر في زهراء مدينة نصر، بنعمل سندوتشات الكبدة والسجق زي ما اتعلمناها: لحمة مختارة، تتبيلة على أصولها، وعيش فينو طازة. كل سندوتش بيتعمل وقت ما تطلبه.</p>
+    <h2>أهلاً بيك في بيت عليوه — طعم البيت الأصلي</h2>
+    <p>الأكل الحلو مش بس مكونات؛ ده أصل ولمّة وذكريات حوالين الترابيزة. في بيت عليوه بنجيبلك نكهات الشارع الأصيلة لحد طبقك، وبنعمل الوصفات الكلاسيك بأحسن المكونات.</p>
+    <p>مطبخنا قايم على الأصول. سواء نفسك في كبدة اسكندراني حراقة ومتبلة على أصولها، ولا سجق مشوي ريحته مدخنة، ولا تختم أكلتك بحلاوة السكلانس اللي بترجعك لأيام زمان، كل ساندوتش بيتعمل بالظبط زي ما المفروض يتاكل.</p>
+    <p>عملنا بيت عليوه لأننا مؤمنين إن أحلى أكل هو اللي تحس إنه مألوف. مبنقصّرش في حاجة، ومبنتنازلش عن الطعم، ودايماً أكلنا طازة وسخن في عيش الفينو بتاعنا. تعالى خد لقمة واقعد معانا، ودوق الفرق.</p>
     <div class="stats">
       <div class="stat"><b class="num">١٣</b><span>ساعة شغل كل يوم</span></div>
       <div class="stat"><b class="num">٢٥ ج</b><span>أول سعر في المنيو</span></div>
@@ -164,6 +166,7 @@
 <div class="cartbar" id="cartbar"><button id="cartbarBtn"><span class="n num" id="cbN">0</span><span>عرض السلة</span><span class="t num" id="cbT"></span></button></div>
 <div class="toast" id="toast" role="status"></div>
 </div>
+
 <script src="script.js"></script>
 </body>
 </html>

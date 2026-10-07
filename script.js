@@ -38,7 +38,7 @@ const BY=Object.fromEntries(ITEMS.map(i=>[i.id,i]));
 const CATS=[['all','الكل',null],['offer','العروض','٣'],['kebda','كبدة','kebda'],['sogo2','سجق','sharqy'],['mda5n','مدخن','mda5n'],['panne','بانيه','panne'],['burger','برجر','burger'],['sweet','سكلانس','sakalans'],['sides','بطاطس وإضافات','fries'],['drinks','مشروبات وسناكس','pepsi']];
 const $=s=>document.querySelector(s), ar=n=>String(n);
 let cart={}; try{cart=JSON.parse(localStorage.getItem('be_cart')||'{}')||{}}catch(e){cart={}}
-for(const k in cart) if(!BY[k]||!(cart[k]>0)) delete cart[k];
+for(const k in cart){const q=Math.floor(Number(cart[k])); if(!Object.prototype.hasOwnProperty.call(BY,k)||!(q>0)) delete cart[k]; else cart[k]=Math.min(50,q)}
 const save=()=>{try{localStorage.setItem('be_cart',JSON.stringify(cart))}catch(e){}};
 let filter='all', step='cart';
 
@@ -133,7 +133,7 @@ function lineHTML(k,q){const i=BY[k];return `<div class="line"><img src="${i.src
 function totalsHTML(t){return `<div class="tot"><span>المجموع</span><span class="num">${ar(t.sub)} ج</span></div>
   ${t.disc?`<div class="tot disc"><span>خصم عرض ٣ بـ ١٠٠ (×${ar(t.groups)})</span><span class="num">−${ar(t.disc)} ج</span></div>`:''}
   ${form.mode==='pickup'?`<div class="tot disc"><span>استلام من الفرع</span><span>بدون توصيل</span></div>`
-    :`<div class="tot"><span>التوصيل (${form.area})</span><span class="num">${ar(t.fee)} ج</span></div>`}
+    :`<div class="tot"><span>التوصيل (${esc(form.area)})</span><span class="num">${ar(t.fee)} ج</span></div>`}
   <div class="tot grand"><span>الإجمالي</span><span class="num">${ar(t.total)} ج</span></div>`}
 // One id per confirmed order: shown in the WhatsApp message and the sheet so they can be matched.
 let orderId=null, loggedId=null;
@@ -189,7 +189,7 @@ function renderDrawer(){
      </form>`;
     F.innerHTML=totalsHTML(t)+`<button class="btn btn-red" type="submit" form="coForm">راجع الطلب</button>`;
     $('#back').onclick=()=>{step='cart';renderDrawer()};
-    $('#coForm').addEventListener('input',e=>{if(e.target.name){form[e.target.name]=e.target.value;e.target.closest('.field').classList.remove('bad')}
+    $('#coForm').addEventListener('input',e=>{if(e.target.name){form[e.target.name]=e.target.name==='area'&&!Object.prototype.hasOwnProperty.call(ZONES,e.target.value)?Object.keys(ZONES)[0]:e.target.value;e.target.closest('.field').classList.remove('bad')}
       if(e.target.name==='area'){$('#drawerFoot').querySelector('.tot')&&renderFormFoot()}});
     const renderFormFoot=()=>{const b=F.querySelector('button[form]');F.innerHTML=totalsHTML(calc());F.appendChild(b)};
     $('#coForm').addEventListener('submit',e=>{e.preventDefault();let ok=true;

@@ -82,6 +82,7 @@ const HEADERS = ['التاريخ والوقت', 'رقم الطلب', 'الحال
   'المجموع', 'الخصم', 'التوصيل', 'الإجمالي', 'ملاحظات', 'تنبيه'];
 
 const MAX_ORDERS_PER_PHONE_10_MIN = 3;
+const MAX_ORDERS_PER_MINUTE = 20;          // whole shop; stops someone flooding the sheet with fake numbers
 
 
 /** شغّلها مرة واحدة بس (الخطوة 4). آمن تشغيلها تاني. */
@@ -135,10 +136,15 @@ function doPost(e) {
       const recent = Number(cache.get(rateKey) || 0);
       if (recent >= MAX_ORDERS_PER_PHONE_10_MIN) return json_({ ok: false, error: 'TOO_MANY_ORDERS' });
 
+      const minuteKey = 'all:' + Math.floor(Date.now() / 60000);
+      const perMinute = Number(cache.get(minuteKey) || 0);
+      if (perMinute >= MAX_ORDERS_PER_MINUTE) return json_({ ok: false, error: 'BUSY' });
+
       const p = price_(order);
       const warnings = p.warnings.slice();
-      if (Number(order.clientTotal) !== p.total) {
-        warnings.push('إجمالي الموقع ' + order.clientTotal + ' ≠ الإجمالي الصحيح ' + p.total);
+      const clientTotal = Number(order.clientTotal);
+      if (clientTotal !== p.total) {
+        warnings.push('إجمالي الموقع ' + (isFinite(clientTotal) ? clientTotal : '؟') + ' ≠ الإجمالي الصحيح ' + p.total);
       }
 
       const pickup = order.mode === 'pickup';
@@ -164,13 +170,16 @@ function doPost(e) {
 
       cache.put('id:' + order.orderId, '1', 21600);          // 6 hours
       cache.put(rateKey, String(recent + 1), 600);           // 10 minutes
+      cache.put(minuteKey, String(perMinute + 1), 120);
     } finally {
       lock.releaseLock();
     }
     return json_({ ok: true });
   } catch (err) {
-    console.error(err);
-    return json_({ ok: false, error: String(err && err.message || err) });
+    console.error(err);                                      // full detail stays in the script's own log
+    const msg = String(err && err.message || '');
+    // Only our own validation codes go back to the caller; anything else is a generic error.
+    return json_({ ok: false, error: /^[A-Z_]+$/.test(msg) ? msg : 'BAD_REQUEST' });
   }
 }
 
