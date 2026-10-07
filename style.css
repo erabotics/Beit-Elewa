@@ -165,7 +165,7 @@ section.sec{padding-block:80px 8px;scroll-margin-top:calc(var(--hdr) + 70px)}
 .board-head{display:flex;flex-direction:column;gap:10px;position:sticky;top:calc(var(--hdr) + 90px)}
 .board-head h2{font-size:clamp(32px,5vw,46px)}
 .board-head p{margin:0;opacity:.75}
-.board-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.board-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .tile{background:var(--card);color:var(--ink);border-radius:20px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;cursor:pointer;transition:transform .2s}
 .tile:hover{transform:translateY(-4px) rotate(-1deg)}
 .tile img{width:100%;aspect-ratio:1;object-fit:cover;display:block}

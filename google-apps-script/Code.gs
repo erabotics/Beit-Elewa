@@ -60,7 +60,6 @@ const MENU = {
   tomato:   { name: 'طماطم متبلة',       price: 15 },
   pepsi:    { name: 'بيبسي',             price: 20 },
   '7up':    { name: 'سفن أب',            price: 20 },
-  mirinda:  { name: 'ميرندا برتقال',     price: 20 },
   vcola:    { name: 'في كولا',           price: 20 },
   vdiet:    { name: 'في كولا دايت',      price: 20 },
   v7lemon:  { name: 'في ٧ ليمون نعناع',  price: 20 },
@@ -72,7 +71,7 @@ const MENU = {
 // كومبو (بطاطس + كانز) بـ 45 مع أي ساندوتش — واحد لكل ساندوتش.
 const COMBO_PRICE = 45;
 const COMBO_FOR = ['kebda', 'khalta', 'sharqy', 'sharqyc', 'mda5n', 'panne', 'burger', 'sakalans'];
-['pepsi', '7up', 'mirinda', 'vcola', 'vdiet', 'v7lemon'].forEach(function (id) {
+['pepsi', '7up', 'vcola', 'vdiet', 'v7lemon'].forEach(function (id) {
   MENU['combo_' + id] = { name: 'كومبو: بطاطس + ' + MENU[id].name, price: COMBO_PRICE, combo: true };
 });
 

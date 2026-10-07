@@ -23,7 +23,6 @@ const ITEMS=[
  // drinks & snacks — prices are placeholders until the restaurant confirms them
  {id:'pepsi',cat:'drinks',name:'بيبسي',desc:'كانز ساقع',price:20,img:'pepsi-wood',side:1,drink:1},
  {id:'7up',cat:'drinks',name:'سفن أب',desc:'كانز ساقع',price:20,img:'7up-wood',side:1,drink:1},
- {id:'mirinda',cat:'drinks',name:'ميرندا برتقال',desc:'كانز ساقع',price:20,art:['can','#F26A10','#1E9E3A','#FFF1E6'],side:1,drink:1},
  {id:'vcola',cat:'drinks',name:'في كولا',desc:'كانز ساقع',price:20,img:'vcola-wood',side:1,drink:1},
  {id:'vdiet',cat:'drinks',name:'في كولا دايت',desc:'كانز ساقع — بدون سكر',price:20,img:'vcola-diet-wood',side:1,drink:1},
  {id:'v7lemon',cat:'drinks',name:'في ٧ ليمون نعناع',desc:'كانز ساقع بقطع الليمون',price:20,img:'v7-lemon-wood',side:1,drink:1},
@@ -34,17 +33,7 @@ const ITEMS=[
 // Combo: fries + a can for each sandwich, picked in the cart.
 const COMBO_PRICE=45, COMBO_FOR=['kebda','khalta','sharqy','sharqyc','mda5n','panne','burger','sakalans'];
 ITEMS.filter(i=>i.drink&&/كانز/.test(i.desc)).forEach(d=>ITEMS.push({id:'combo_'+d.id,cat:'addon',name:'كومبو: بطاطس + '+d.name,desc:'بطاطس + '+d.name,price:COMBO_PRICE,img:'bw-fries',side:1,hidden:1,combo:1,drinkName:d.name}));
-function artSrc([k,c1,c2,bg]){
-  const shadow='<ellipse cx="100" cy="176" rx="46" ry="7" fill="#000" opacity=".12"/>';
-  const shapes={
-   can:`<rect x="72" y="34" width="56" height="12" rx="5" fill="#C9CDD3"/><rect x="68" y="42" width="64" height="126" rx="12" fill="${c1}"/><path d="M68 96q32-22 64 0v22q-32-22-64 0z" fill="${c2}"/><path d="M68 112q32-14 64 0v6q-32-14-64 0z" fill="#fff" opacity=".85"/><rect x="66" y="160" width="68" height="10" rx="5" fill="#B9BEC5"/><rect x="78" y="52" width="8" height="100" rx="4" fill="#fff" opacity=".28"/><circle cx="120" cy="64" r="3" fill="#fff" opacity=".6"/><circle cx="114" cy="140" r="2.5" fill="#fff" opacity=".6"/>`,
-   carton:`<path d="M70 62l12-26h36l12 26z" fill="${c2}"/><rect x="70" y="62" width="60" height="108" rx="4" fill="${c1}"/><rect x="104" y="22" width="5" height="22" rx="2" fill="#fff" transform="rotate(14 106 33)"/><circle cx="100" cy="112" r="20" fill="${c2}"/><path d="M100 92q8-10 16-6q-6 8-16 6z" fill="#3E9B3A"/><rect x="78" y="70" width="7" height="92" rx="3.5" fill="#fff" opacity=".22"/>`,
-   bottle:`<rect x="88" y="22" width="24" height="14" rx="3" fill="${c1}"/><path d="M90 36h20v12q16 10 16 30v80q0 10-10 10h-32q-10 0-10-10v-80q0-20 16-30z" fill="${c2}" opacity=".9"/><rect x="74" y="98" width="52" height="34" fill="${c1}"/><path d="M76 115q12-8 24 0t24 0" stroke="#fff" stroke-width="3" fill="none"/><rect x="82" y="58" width="7" height="100" rx="3.5" fill="#fff" opacity=".5"/>`,
-   bag:`<path d="M56 40h88l-4 8 4 8-4 8q8 50 0 100l4 8-4 8 4 8H56l4-8-4-8 4-8q-8-50 0-100l-4-8 4-8z" fill="${c1}"/><path d="M60 100h80v30H60z" fill="${c2}"/><ellipse cx="100" cy="82" rx="22" ry="14" fill="#F2B544" stroke="#C98A1E" stroke-width="3"/><ellipse cx="88" cy="150" rx="12" ry="8" fill="#F2B544"/><ellipse cx="114" cy="155" rx="10" ry="7" fill="#F2B544"/>`};
-  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="${bg}"/><circle cx="100" cy="104" r="78" fill="#fff" opacity=".55"/>${shadow}${shapes[k]}</svg>`;
-  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
-}
-ITEMS.forEach(i=>{i.src=i.art?artSrc(i.art):'img/'+i.img+'.jpg';i.offer=!i.side&&i.price===OFFER_PRICE});
+ITEMS.forEach(i=>{i.src='img/'+i.img+'.jpg';i.offer=!i.side&&i.price===OFFER_PRICE});
 const BY=Object.fromEntries(ITEMS.map(i=>[i.id,i]));
 const CATS=[['all','الكل',null],['offer','العروض','٣'],['kebda','كبدة','kebda'],['sogo2','سجق','sharqy'],['mda5n','مدخن','mda5n'],['panne','بانيه','panne'],['burger','برجر','burger'],['sweet','سكلانس','sakalans'],['sides','بطاطس وإضافات','fries'],['drinks','مشروبات وسناكس','pepsi']];
 const $=s=>document.querySelector(s), ar=n=>String(n);

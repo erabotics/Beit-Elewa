@@ -322,7 +322,6 @@ insert into public.products (id, name, category, price_egp, offer_eligible, stoc
   ('tomato',   'طماطم متبلة',        'sides',  15,  false, null),
   ('pepsi',    'بيبسي',              'drinks', 20,  false, 0),  -- * price
   ('7up',      'سفن أب',             'drinks', 20,  false, 0),  -- * price
-  ('mirinda',  'ميرندا برتقال',      'drinks', 20,  false, 0),
   ('vcola',    'في كولا',            'drinks', 20,  false, 0),
   ('vdiet',    'في كولا دايت',       'drinks', 20,  false, 0),
   ('v7lemon',  'في ٧ ليمون نعناع',   'drinks', 20,  false, 0),
@@ -333,7 +332,6 @@ insert into public.products (id, name, category, price_egp, offer_eligible, stoc
   ('cheese',   'جبنة زيادة',         'addon',  15,  false, null),
   ('combo_pepsi',   'كومبو: بطاطس + بيبسي',           'addon', 45, false, null),
   ('combo_7up',     'كومبو: بطاطس + سفن أب',          'addon', 45, false, null),
-  ('combo_mirinda', 'كومبو: بطاطس + ميرندا برتقال',   'addon', 45, false, null),
   ('combo_vcola',   'كومبو: بطاطس + في كولا',         'addon', 45, false, null),
   ('combo_vdiet',   'كومبو: بطاطس + في كولا دايت',    'addon', 45, false, null),
   ('combo_v7lemon', 'كومبو: بطاطس + في ٧ ليمون نعناع', 'addon', 45, false, null)
