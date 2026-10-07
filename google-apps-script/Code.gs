@@ -52,6 +52,7 @@ const MENU = {
   panne:    { name: 'بانيه',             price: 120 },
   burger:   { name: 'كلاسيك برجر',       price: 130 },
   patty:    { name: 'قطعة برجر زيادة',   price: 90 },
+  cheese:   { name: 'جبنة زيادة',        price: 15 },
   sakalans: { name: 'سكلانس',            price: 35, offer: true },
   fries:    { name: 'بطاطس',             price: 25 },
   tahina:   { name: 'طحينة',             price: 15 },
@@ -241,6 +242,9 @@ function price_(o) {
   const mains = COMBO_FOR.reduce(function (s, id) { return s + (qty[id] || 0); }, 0);
   const warnings = [];
   if ((qty.patty || 0) > (qty.burger || 0)) warnings.push('قطع برجر زيادة أكتر من عدد البرجر');
+  const sandwiches = ['kebda', 'khalta', 'sharqy', 'sharqyc', 'mda5n', 'panne', 'burger']
+    .reduce(function (s, id) { return s + (qty[id] || 0); }, 0);
+  if ((qty.cheese || 0) > sandwiches) warnings.push('جبنة زيادة أكتر من عدد السندوتشات');
   if (combos > mains) warnings.push('كومبو أكتر من عدد البرجر والبانيه');
 
   const fee = o.mode === 'pickup' ? 0 : DELIVERY_ZONES[o.area];

@@ -330,6 +330,7 @@ insert into public.products (id, name, category, price_egp, offer_eligible, stoc
   ('chipsy',   'شيبسي',              'drinks', 15,  false, 0),
   ('water',    'مياه',               'drinks', 10,  false, 0),  -- * price
   ('patty',    'قطعة برجر زيادة',    'addon',  90,  false, null),
+  ('cheese',   'جبنة زيادة',         'addon',  15,  false, null),
   ('combo_pepsi',   'كومبو: بطاطس + بيبسي',           'addon', 45, false, null),
   ('combo_7up',     'كومبو: بطاطس + سفن أب',          'addon', 45, false, null),
   ('combo_mirinda', 'كومبو: بطاطس + ميرندا برتقال',   'addon', 45, false, null),

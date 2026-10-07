@@ -14,6 +14,7 @@ const ITEMS=[
  {id:'panne',cat:'panne',name:'بانيه',desc:'بانيه فراخ مقرمش مع الخس والصوص',price:120,img:'bw-panne'},
  {id:'burger',cat:'burger',name:'كلاسيك برجر',desc:'كلاسيك برجر بالجبنة',price:130,img:'bw-burger',badge:'مميز'},
  {id:'patty',cat:'addon',name:'قطعة برجر زيادة',desc:'قطعة لحمة برجر زيادة جوه الساندوتش',price:90,img:'bw-burger',side:1,hidden:1,addonFor:['burger']},
+ {id:'cheese',cat:'addon',name:'جبنة زيادة',desc:'جبنة سايحة زيادة على الساندوتش',price:15,img:'sharqy-cheese-v2',side:1,hidden:1,addonFor:['kebda','khalta','sharqy','sharqyc','mda5n','panne','burger']},
  {id:'sakalans',cat:'sweet',name:'سكلانس',desc:'حلاوة بالقشطة والمربى في عيش فينو',price:35,img:'bw-sakalans'},
  {id:'fries',cat:'sides',name:'بطاطس',desc:'بطاطس مقلية مقرمشة',price:25,img:'bw-fries',side:1},
  {id:'tahina',cat:'sides',name:'طحينة',desc:'طحينة طازة',price:15,img:'bw-tahina',side:1},
@@ -87,8 +88,9 @@ function calc(){
   const fee=form.mode==='pickup'?0:(ZONES[form.area]??0);
   return {sub,count,offerUnits,groups,disc,fee,total:count?sub-disc+fee:0};
 }
+const addonMax=a=>a.addonFor.reduce((s,id)=>s+(cart[id]||0),0);
 function capAddons(){const n=id=>cart[id]||0;
-  const p=Math.min(n('patty'),n('burger')); if(p)cart.patty=p; else delete cart.patty;
+  ITEMS.filter(a=>a.addonFor).forEach(a=>{const q=Math.min(n(a.id),addonMax(a)); if(q)cart[a.id]=q; else delete cart[a.id]});
   let room=COMBO_FOR.reduce((s,id)=>s+n(id),0);
   ITEMS.filter(i=>i.combo).forEach(c=>{const q=Math.min(n(c.id),room);room-=q;if(q)cart[c.id]=q;else delete cart[c.id]});}
 function setQty(id,q){q=Math.max(0,Math.min(50,q)); if(q)cart[id]=q; else delete cart[id]; capAddons(); orderId=null; save(); refresh(id)}
@@ -175,7 +177,7 @@ function renderDrawer(){
     const meter=t.offerUnits===0?`<div class="offer-meter">ضيف ٣ من سندوتشات الـ ٣٥ جنيه وخدهم بـ ١٠٠ جنيه بس<div class="meter"><i style="width:0%"></i></div></div>`
       :rem? `<div class="offer-meter">ضيف ${rem===1?'سندوتش واحد':'سندوتشين'} كمان من الـ ٣٥ جنيه وتاخد العرض<div class="meter"><i style="width:${(t.offerUnits%3)/3*100}%"></i></div></div>`
       :`<div class="offer-meter ok">✓ العرض اتطبق — وفّرت ${ar(t.disc)} جنيه</div>`;
-    const ups=[...(cart.burger&&(cart.patty||0)<cart.burger?[BY.patty]:[]),
+    const ups=[...ITEMS.filter(a=>a.addonFor&&(cart[a.id]||0)<addonMax(a)),
       ...ITEMS.filter(i=>(i.side||i.offer)&&!i.hidden&&!cart[i.id]).sort((a,b)=>(b.drink||0)-(a.drink||0))].slice(0,8);
     B.innerHTML=meter+Object.entries(cart).map(([k,q])=>lineHTML(k,q)).join('')+comboHTML()+
       (ups.length?`<div class="upsell"><h4>ناس كتير بتضيف</h4><div class="upsell-row">${ups.map(i=>`<button class="up" data-act="inc" data-id="${i.id}"><img src="${i.src}" alt="">${i.name}<br><span class="num">+${ar(i.price)} ج</span></button>`).join('')}</div></div>`:'');
@@ -227,7 +229,7 @@ document.addEventListener('click',e=>{
   if(md){form.mode=md.dataset.mode;renderDrawer();return}
   const act=e.target.closest('[data-act]');
   if(act){e.stopPropagation();const id=act.dataset.id||act.closest('[data-id]').dataset.id;const q=cart[id]||0;
-    if(act.dataset.act==='inc'){setQty(id,q+1);if(!q)toast(cart[id]?`اتضاف ${BY[id].name} للسلة`:'ضيف البرجر الأول')}else setQty(id,q-1);return}
+    if(act.dataset.act==='inc'){setQty(id,q+1);if(!q)toast(cart[id]?`اتضاف ${BY[id].name} للسلة`:'ضيف الساندوتش الأول')}else setQty(id,q-1);return}
   const f=e.target.closest('[data-filter]');
   if(f){setFilter(f.dataset.filter);if(!f.classList.contains('cat'))$('#menu').scrollIntoView({behavior:'smooth'});return}
   const o=e.target.closest('[data-open]'); if(o){openQV(o.dataset.open);return}
