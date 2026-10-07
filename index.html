@@ -14,14 +14,14 @@
 <link rel="icon" type="image/png" href="img/logo.png">
 <link rel="apple-touch-icon" href="img/logo.png">
 <link rel="stylesheet" href="style.css">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","name":"بيت عليوه — Beit Elewa","servesCuisine":"Egyptian street food","telephone":"+201034745251","address":{"@type":"PostalAddress","streetAddress":"موقف الحي العاشر","addressLocality":"زهراء مدينة نصر","addressRegion":"القاهرة","addressCountry":"EG"},"openingHours":"Mo-Su 14:00-03:00","priceRange":"EGP 10-130","image":"img/logo.png","sameAs":["https://www.instagram.com/beit.elewa/","https://www.facebook.com/share/1CJu7JSAZc/"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","name":"بيت عليوه — Beit Elewa","servesCuisine":"Egyptian street food","telephone":"+201034745251","address":{"@type":"PostalAddress","streetAddress":"موقف الحي العاشر","addressLocality":"زهراء مدينة نصر","addressRegion":"القاهرة","addressCountry":"EG"},"openingHours":"Mo-Su 11:00-03:00","priceRange":"EGP 10-130","image":"img/logo.png","sameAs":["https://www.instagram.com/beit.elewa/","https://www.facebook.com/share/1CJu7JSAZc/"]}</script>
 </head>
 <body>
 <div class="app" dir="rtl" lang="ar">
 
 <div class="strip"><div class="wrap">
   <span><b>٣ سندوتشات بـ ١٠٠ جنيه</b> — على كل سندوتشات الـ ٣٥ جنيه</span>
-  <span class="hide-s">مفتوحين من ٢ الضهر لـ ٣ الفجر · توصيل أو استلام من الفرع</span>
+  <span class="hide-s">مفتوحين من ١١ الصبح لـ ٣ الفجر · توصيل أو استلام من الفرع</span>
 </div></div>
 
 <header class="hdr"><div class="wrap">
@@ -31,6 +31,7 @@
     <a href="#menu">المنيو</a><a href="#offers">العروض</a><a href="#menu" data-jump="cats">الأقسام</a><a href="#about">عن بيت عليوه</a><a href="#contact">تواصل معانا</a>
   </nav>
   <div class="hdr-end">
+    <button class="cart-btn theme-btn" id="themeBtn" type="button" aria-label="الوضع الليلي" aria-pressed="false"></button>
     <button class="cart-btn" id="cartBtn" aria-label="السلة"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.3 10.4a2 2 0 0 1-2 1.6H8.3a2 2 0 0 1-2-1.6Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span class="cart-count num" id="cartCount" hidden>0</span></button>
     <a class="btn btn-red cta" href="#menu">اطلب دلوقتي</a>
   </div>
@@ -50,7 +51,7 @@
     <div class="hero-img" id="heroImg" role="img" aria-label="شواية سجق وكبدة على النار"></div>
     <div class="sticker" aria-label="عرض ٣ سندوتشات بـ ١٠٠ جنيه"><small>أي ٣ سندوتشات</small><b>١٠٠</b><em>جنيه بس</em></div>
     <div class="hero-body">
-      <span class="eyebrow"><i></i> بنستقبل طلبات دلوقتي · ٢ ظ – ٣ ف</span>
+      <span class="eyebrow" id="openNow"><i></i> <span>مفتوحين كل يوم · ١١ ص – ٣ ف</span></span>
       <h1>بيت عليوه<span>سندوتشات على أصولها</span></h1>
       <p>كبدة اسكندراني، سجق بالخلطة، شرقي، مدخن، بانيه وكلاسيك برجر — لحمة premium متخمّرة على أصولها، سخنة من على النار لحد باب البيت.</p>
       <div class="hero-ctas">
@@ -61,7 +62,7 @@
   </div>
   <div class="facts">
     <div class="fact"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg><div><b>توصيل أو استلام من الفرع</b><span>توصيل لزهراء مدينة نصر والواحة · الاستلام مجاناً</span></div></div>
-    <div class="fact"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>من ٢ الضهر لـ ٣ الفجر</b><span>كل يوم</span></div></div>
+    <div class="fact"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>من ١١ الصبح لـ ٣ الفجر</b><span>كل يوم</span></div></div>
     <div class="fact"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg><div><b>زهراء مدينة نصر</b><span>موقف الحي العاشر</span></div></div>
   </div>
   <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
@@ -111,7 +112,7 @@
     <p>مطبخنا قايم على الأصول. سواء نفسك في كبدة اسكندراني حراقة ومتبلة على أصولها، ولا سجق مشوي ريحته مدخنة، ولا تختم أكلتك بحلاوة السكلانس اللي بترجعك لأيام زمان، كل ساندوتش بيتعمل بالظبط زي ما المفروض يتاكل.</p>
     <p>عملنا بيت عليوه لأننا مؤمنين إن أحلى أكل هو اللي تحس إنه مألوف. مبنقصّرش في حاجة، ومبنتنازلش عن الطعم، ودايماً أكلنا طازة وسخن في عيش الفينو بتاعنا. تعالى خد لقمة واقعد معانا، ودوق الفرق.</p>
     <div class="stats">
-      <div class="stat"><b class="num">١٣</b><span>ساعة شغل كل يوم</span></div>
+      <div class="stat"><b class="num">١٦</b><span>ساعة شغل كل يوم</span></div>
       <div class="stat"><b class="num">٢٥ ج</b><span>أول سعر في المنيو</span></div>
       <div class="stat"><b>مجاناً</b><span>لو هتستلم من الفرع</span></div>
     </div>
@@ -123,7 +124,7 @@
   <div class="contact">
     <div class="c-card"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><h3>اتصل أو واتساب</h3><span class="big num">0103 474 5251</span><p><a href="https://wa.me/201034745251" target="_blank" rel="noopener">افتح المحادثة على واتساب</a></p></div>
     <div class="c-card"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg><h3>الفرع</h3><p>زهراء مدينة نصر — موقف الحي العاشر</p><p>التوصيل لزهراء مدينة نصر والواحة فقط، أو استلم طلبك من الفرع</p></div>
-    <div class="c-card"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><h3>مواعيدنا</h3><p>كل يوم من ٢ الضهر لـ ٣ الفجر</p><p>الدفع كاش عند الاستلام</p></div>
+    <div class="c-card"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><h3>مواعيدنا</h3><p>كل يوم من ١١ الصبح لـ ٣ الفجر</p><p>الدفع كاش عند الاستلام</p></div>
   </div>
   <div class="social">
     <a class="soc" href="https://www.instagram.com/beit.elewa/" target="_blank" rel="noopener"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>تابعنا على إنستجرام <small>@beit.elewa</small></a>
@@ -164,6 +165,23 @@
 </aside>
 
 <div class="cartbar" id="cartbar"><button id="cartbarBtn"><span class="n num" id="cbN">0</span><span>عرض السلة</span><span class="t num" id="cbT"></span></button></div>
+<button class="chat-fab" id="chatFab" type="button" aria-label="اسأل مساعد بيت عليوه"><span class="dot"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12Z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg></span><span class="lbl">اسأل بيت عليوه</span></button>
+<section class="chat" id="chat" role="dialog" aria-modal="false" aria-labelledby="chatTitle" hidden>
+  <div class="chat-head">
+    <span class="av" aria-hidden="true">ع</span>
+    <div class="sp"><b id="chatTitle">مساعد بيت عليوه</b><small>مساعد آلي · بيرد بالعربي و English</small></div>
+    <button type="button" id="chatHuman" aria-label="كلم حد من المطعم" title="كلم حد من المطعم"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></button>
+    <button type="button" id="chatClose" aria-label="إغلاق المساعد">✕</button>
+  </div>
+  <div class="chat-log" id="chatLog" aria-live="polite"></div>
+  <div class="chat-chips" id="chatChips"></div>
+  <form class="chat-form" id="chatForm" autocomplete="off">
+    <label for="chatInput" class="sr">اكتب سؤالك</label>
+    <textarea id="chatInput" rows="1" maxlength="500" placeholder="اكتب سؤالك… / Ask a question" dir="auto"></textarea>
+    <button type="submit" id="chatSend" aria-label="ابعت"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></button>
+  </form>
+  <p class="chat-note">مساعد آلي وممكن يغلط. للتأكيد كلمنا واتساب 0103 474 5251</p>
+</section>
 <div class="toast" id="toast" role="status"></div>
 </div>
 
