@@ -39,9 +39,9 @@ const ITEMS=[
 // Combo: fries + a can for each sandwich, picked in the cart.
 let COMBO_PRICE=45, COMBO_FOR=['kebda','khalta','sharqy','sharqyc','mda5n','panne','burger','sakalans'];
 ITEMS.filter(i=>i.drink&&/كانز/.test(i.desc)).forEach(d=>ITEMS.push({id:'combo_'+d.id,cat:'addon',name:'كومبو: بطاطس + '+d.name,desc:'بطاطس + '+d.name,price:COMBO_PRICE,img:'bw-fries',side:1,hidden:1,combo:1,drinkName:d.name}));
-ITEMS.forEach(i=>{i.src='img/'+i.img+'.jpg';i.offer=!i.side&&i.price===OFFER_PRICE});
+ITEMS.forEach(i=>{i.src='img/'+i.img+'.jpg';i.offer=false});
 const BY=Object.fromEntries(ITEMS.map(i=>[i.id,i]));
-const CATS=[['all','الكل',null],['offer','العروض','٣'],['kebda','كبدة','kebda'],['sogo2','سجق','sharqy'],['mda5n','مدخن','mda5n'],['panne','بانيه','panne'],['burger','برجر','burger'],['sweet','سكلانس','sakalans'],['sides','بطاطس وإضافات','fries'],['drinks','مشروبات وسناكس','pepsi']];
+const CATS=[['all','الكل',null],['kebda','كبدة','kebda'],['sogo2','سجق','sharqy'],['mda5n','مدخن','mda5n'],['panne','بانيه','panne'],['burger','برجر','burger'],['sweet','سكلانس','sakalans'],['sides','بطاطس وإضافات','fries'],['drinks','مشروبات وسناكس','pepsi']];
 const $=s=>document.querySelector(s), ar=n=>String(n);
 let cart={}; try{cart=JSON.parse(localStorage.getItem('be_cart')||'{}')||{}}catch(e){cart={}}
 for(const k in cart){const q=Math.floor(Number(cart[k])); if(!Object.prototype.hasOwnProperty.call(BY,k)||!(q>0)) delete cart[k]; else cart[k]=Math.min(50,q)}
@@ -168,13 +168,9 @@ function renderDrawer(){
     B.innerHTML=`<div class="empty"><div class="logo-mark">ع</div><b>السلة فاضية</b><p>ابدأ بسندوتش كبدة — الأكثر طلباً عندنا.</p></div>`;
     F.innerHTML=`<button class="btn btn-red" data-close data-go="menu">تصفح المنيو</button>`;return}
   if(step==='cart'){$('#drawerTitle').textContent='سلة الطلب';
-    const rem=(3-t.offerUnits%3)%3;
-    const meter=t.offerUnits===0?`<div class="offer-meter">ضيف ٣ من سندوتشات الـ ٣٥ جنيه وخدهم بـ ١٠٠ جنيه بس<div class="meter"><i style="width:0%"></i></div></div>`
-      :rem? `<div class="offer-meter">ضيف ${rem===1?'سندوتش واحد':'سندوتشين'} كمان من الـ ٣٥ جنيه وتاخد العرض<div class="meter"><i style="width:${(t.offerUnits%3)/3*100}%"></i></div></div>`
-      :`<div class="offer-meter ok">✓ العرض اتطبق — وفّرت ${ar(t.disc)} جنيه</div>`;
     const ups=[...ITEMS.filter(a=>a.addonFor&&(cart[a.id]||0)<addonMax(a)),
       ...ITEMS.filter(i=>(i.side||i.offer)&&!i.hidden&&!cart[i.id]).sort((a,b)=>(b.drink||0)-(a.drink||0))].slice(0,8);
-    B.innerHTML=meter+Object.entries(cart).map(([k,q])=>lineHTML(k,q)).join('')+comboHTML()+
+    B.innerHTML=Object.entries(cart).map(([k,q])=>lineHTML(k,q)).join('')+comboHTML()+
       (ups.length?`<div class="upsell"><h4>ناس كتير بتضيف</h4><div class="upsell-row">${ups.map(i=>`<button class="up" data-act="inc" data-id="${i.id}"><img src="${i.src}" alt="">${i.name}<br><span class="num">+${ar(i.price)} ج</span></button>`).join('')}</div></div>`:'');
     const ac=$('#addCombo'); if(ac) ac.onclick=()=>{const id=$('#comboDrink').value; setQty(id,(cart[id]||0)+1); toast('اتضاف الكومبو')};
     F.innerHTML=modeHTML()+totalsHTML(t)+`<button class="btn btn-red" id="toCheckout">كمّل الطلب · ${ar(t.total)} ج</button>`;
@@ -272,13 +268,13 @@ async function syncMenu(){if(!SHEETS_OK)return;
     d.items.forEach(x=>{if(!x||typeof x.id!=='string')return; const p=Number(x.price), ok=Number.isInteger(p)&&p>0&&p<10000;
       if(x.id==='combo'){if(ok){COMBO_PRICE=p;ITEMS.filter(i=>i.combo).forEach(i=>{i.price=p})}return}
       const i=Object.prototype.hasOwnProperty.call(BY,x.id)?BY[x.id]:null; if(!i||i.combo)return;
-      if(ok)i.price=p; i.unavailable=x.available===false; if(typeof x.offer==='boolean'&&!i.side)i.offer=x.offer});
+      if(ok)i.price=p; i.unavailable=x.available===false; });
     renderGrid();renderBoard();refresh();
   }catch(e){/* keep the built-in menu */}}
 
 // ---------------------------------------------------------------- AI assistant
 const WA_URL='https://wa.me/'+PHONE_WA, IG_URL='https://www.instagram.com/beit.elewa/', FB_URL='https://www.facebook.com/share/1CJu7JSAZc/';
-const CHAT_LINK_RE=/https:\/\/(?:wa\.me\/201034745251|www\.instagram\.com\/beit\.elewa\/?|www\.facebook\.com\/share\/1CJu7JSAZc\/?|erabotics\.github\.io\/Beit-Elewa\/?)/g;
+const CHAT_LINK_RE=/https:\/\/(?:wa\.me\/201034745251|www\.instagram\.com\/beit\.elewa\/?|www\.facebook\.com\/share\/1CJu7JSAZc\/?|beitelewa.github.io\/Beit-Elewa\/?)/g;
 const CHIPS={ar:['إيه أنواع اللحمة عندكم؟','إيه أفضل لحمة للشوي؟','إزاي أطلب؟','عندكم توصيل؟','فين السوشيال ميديا بتاعتكم؟'],
              en:['What types of meat do you sell?','Which meat is best for grilling?','How can I order?','Do you offer delivery?','Where can I find your social media?']};
 const EN={kebda:'Alexandria-style liver',khalta:'Sausage with peppers',sharqy:'Oriental grilled sausage',sharqyc:'Oriental grilled sausage with cheese',mda5n:'Smoked sausage',panne:'Crispy chicken panne',burger:'Classic cheeseburger',sakalans:'Sakalans (sweet: halawa, cream & jam)',fries:'Fries',tahina:'Tahini',pickles:'Pickles',tomato:'Spiced tomatoes',pepsi:'Pepsi','7up':'7Up',vcola:'V Cola',vdiet:'V Cola Diet',v7lemon:'V7 Lemon Mint',juice:'Juhayna orange juice',chipsy:'Chipsy (chili & lime)',water:'Water',patty:'Extra burger patty',cheese:'Extra cheese'};
@@ -312,7 +308,7 @@ function localAnswer(text){const t=norm(text), ar=isAr(text), has=re=>re.test(t)
   if(has(/توصيل|دليفري|ديليفري|بتوصلو|توصلو|delivery|deliver|tawsil/))return ar?`أيوه، بنوصّل لـ ${zones} بس. ولو هتستلم من الفرع (زهراء مدينة نصر — موقف الحي العاشر) مفيش مصاريف توصيل. الدفع كاش عند الاستلام.`:`Yes, we deliver to ${zones} only. Pickup from the branch (Zahraa Nasr City, El Hay El Asher parking) has no delivery fee. Payment is cash on delivery.`;
   if(has(/فين|عنوان|فرع|فروع|مكان|لوكيشن|location|address|branch|where are/))return ar?'عندنا فرع واحد في زهراء مدينة نصر — موقف الحي العاشر.':'We have one branch: Zahraa Nasr City, El Hay El Asher parking.';
   if(has(/دفع|فيزا|كاش|كارت|انستاباي|pay|card|cash|visa/))return INSTAPAY_ON?(ar?`الدفع كاش عند الاستلام، أو InstaPay: بتحوّل الإجمالي على ${INSTAPAY.address} وتبعت صورة التحويل على واتساب مع رقم الطلب.`:`You can pay cash on delivery or by InstaPay: transfer the total to ${INSTAPAY.address} and send the transfer screenshot on WhatsApp with your order number.`):(ar?'الدفع كاش عند الاستلام. مفيش دفع أونلاين على الموقع.':'Payment is cash on delivery or pickup. There is no online payment on the website.');
-  if(has(/عرض|عروض|خصم|offer|deal|discount|promo/))return ar?`عرض الأسبوع: أي ٣ سندوتشات من سندوتشات الـ ٣٥ جنيه (${offerItems}) بـ ١٠٠ جنيه، والخصم بيتحسب لوحده في السلة. البرجر والبانيه مش داخلين في العرض.`:`This week's offer: any 3 of the 35 EGP sandwiches (${offerItems}) for 100 EGP; the discount is applied automatically in the cart. Burger and panne are not included.`;
+  if(has(/عرض|عروض|خصم|offer|deal|discount|promo/))return ar?`مفيش عروض خصم حالياً. بس تقدر تخلي أي ساندوتش كومبو بـ ${COMBO_PRICE} ج (بطاطس + كانز) من السلة.`:`There are no discount offers at the moment, but any sandwich can be a combo for ${COMBO_PRICE} EGP (fries + a can), added from the cart.`;
   if(has(/كومبو|combo|اضافات|اضافه|زياده|extra|add.?on/))return ar?`ممكن تخلي أي ساندوتش كومبو بـ ${COMBO_PRICE} ج (بطاطس + كانز تختاره) من السلة. وفيه جبنة زيادة بـ ${BY.cheese.price} ج لأي ساندوتش، وقطعة برجر زيادة بـ ${BY.patty.price} ج مع البرجر.`:`Any sandwich can be a combo for ${COMBO_PRICE} EGP (fries + a can of your choice), added from the cart. Extra cheese is ${BY.cheese.price} EGP, and an extra burger patty is ${BY.patty.price} EGP with the burger.`;
   if(has(/شوي|مشوي|جريل|grill|bbq|shawy|mashwy/)){const g=ITEMS.filter(i=>!i.hidden&&/مشوي/.test(i.desc));
     return (ar?'الأصناف المشوية عندنا:\n':'Our grilled items:\n')+g.map(i=>`• ${nm(i)} — ${pr(i.price)}`).join('\n')+(ar?'\nإحنا بنبيع سندوتشات جاهزة، مش لحمة نيّة بالكيلو.':'\nWe sell ready-made sandwiches, not raw meat by weight.')}

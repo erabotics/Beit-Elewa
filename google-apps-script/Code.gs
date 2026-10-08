@@ -37,7 +37,7 @@ const TZ = 'Africa/Cairo';
 
 // مصاريف التوصيل لكل منطقة (بالجنيه). الاستلام من الفرع مجاني دايماً.
 const DELIVERY_ZONES = { 'زهراء مدينة نصر': 20, 'الواحة': 20 };
-const OFFER_TOTAL = 100;                      // "أي ٣ سندوتشات بـ ١٠٠"
+const OFFER_TOTAL = 100;                      // (عرض ٣ بـ ١٠٠ متوقف — مفيش صنف عليه offer)
 const COMBO_FOR = ['kebda', 'khalta', 'sharqy', 'sharqyc', 'mda5n', 'panne', 'burger', 'sakalans'];
 const CHEESE_FOR = ['kebda', 'khalta', 'sharqy', 'sharqyc', 'mda5n', 'panne', 'burger'];
 const COMBO_DRINKS = ['pepsi', '7up', 'vcola', 'vdiet', 'v7lemon'];
@@ -50,7 +50,7 @@ const CHAT_MODEL = 'claude-opus-5-5';         // لأرخص تكلفة: 'claude-
 const MAX_CHAT_PER_VISITOR_10_MIN = 15;
 const MAX_CHAT_PER_MINUTE = 30;               // للموقع كله
 const MAX_CHAT_PER_6_HOURS = 400;             // سقف للتكلفة
-const ALLOWED_LINK = /^https:\/\/(wa\.me\/201034745251|www\.instagram\.com\/beit\.elewa\/?|www\.facebook\.com\/share\/1CJu7JSAZc\/?|erabotics\.github\.io\/Beit-Elewa\/?)$/;
+const ALLOWED_LINK = /^https:\/\/(wa\.me\/201034745251|www\.instagram\.com\/beit\.elewa\/?|www\.facebook\.com\/share\/1CJu7JSAZc\/?|beitelewa.github.io\/Beit-Elewa\/?)$/;
 
 // المنيو الأساسي — بيتكتب في تاب "المنيو" أول مرة، وبعد كده التاب هو المرجع.
 const DEFAULT_MENU = [
@@ -89,14 +89,14 @@ const DEFAULT_INFO = [
   ['الاستلام من الفرع', 'متاح ومن غير أي مصاريف توصيل. بتختاره من السلة: "استلام من الفرع".'],
   ['الدفع', 'الدفع كاش عند الاستلام، أو InstaPay: العميل بيحوّل الإجمالي على عنوان InstaPay اللي بيظهر في آخر خطوة في الطلب، وبيبعت صورة التحويل على واتساب مع رقم الطلب، والطلب بيتأكد بعد التأكد من التحويل. مفيش دفع بالفيزا على الموقع.'],
   ['إزاي تطلب من الموقع', '١) اختار الأصناف من المنيو واضغط "أضف للسلة" (أو اضغط على الصنف تشوف تفاصيله وتضيف إضافات). ٢) افتح السلة من أيقونة الشنطة فوق أو من شريط "عرض السلة" تحت على الموبايل. ٣) اختار توصيل أو استلام من الفرع واضغط "كمّل الطلب". ٤) اكتب الاسم والموبايل والعنوان واضغط "راجع الطلب". ٥) اضغط "افتح واتساب وابعت الطلب" وابعت الرسالة؛ الطلب بيتأكد لما نرد عليك.'],
-  ['الأقسام في الموقع', 'في المنيو فيه شريط أقسام: الكل، العروض، كبدة، سجق، مدخن، بانيه، برجر، سكلانس، بطاطس وإضافات، مشروبات وسناكس. وفيه قسم "المشروبات والسناكس" تحت المنيو.'],
-  ['العروض', 'عرض الأسبوع: أي ٣ سندوتشات من سندوتشات الـ ٣٥ جنيه (سجق بالخلطة، سجق شرقي سادة، سكلانس) بـ ١٠٠ جنيه بدل ١٠٥، والخصم بيتحسب لوحده في السلة. البرجر والبانيه مش داخلين في العرض.'],
+  ['الأقسام في الموقع', 'في المنيو فيه شريط أقسام: الكل، كبدة، سجق، مدخن، بانيه، برجر، سكلانس، بطاطس وإضافات، مشروبات وسناكس. وفيه قسم "المشروبات والسناكس" تحت المنيو.'],
+  ['العروض', 'مفيش عروض خصم حالياً. اللي متاح: أي ساندوتش ممكن يبقى كومبو بـ ٤٥ جنيه (بطاطس + كانز).'],
   ['الكومبو', 'أي ساندوتش ممكن يبقى كومبو بـ ٤٥ جنيه زيادة: بطاطس + كانز تختاره (بيبسي، سفن أب، في كولا، في كولا دايت، في ٧ ليمون نعناع). كومبو واحد لكل ساندوتش، وبيتضاف من صندوق "خليها كومبو" في السلة.'],
   ['الإضافات', 'جبنة زيادة ١٥ جنيه لأي ساندوتش ماعدا السكلانس. قطعة برجر زيادة ٩٠ جنيه مع البرجر. وكمان بطاطس وطحينة ومخلل وطماطم متبلة.'],
   ['خدمة العملاء', 'واتساب أو تليفون: 0103 474 5251 — لينك الواتساب: https://wa.me/201034745251'],
   ['إنستجرام', 'https://www.instagram.com/beit.elewa/ (@beit.elewa)'],
   ['فيسبوك', 'https://www.facebook.com/share/1CJu7JSAZc/'],
-  ['الموقع', 'https://erabotics.github.io/Beit-Elewa/'],
+  ['الموقع', 'https://beitelewa.github.io/Beit-Elewa/'],
   ['متابعة الطلب', 'الموقع مفيهوش حسابات ولا صفحة لمتابعة الطلب. الطلب بيتأكد على واتساب، ولمتابعته كلمنا على واتساب ومعاك رقم الطلب (بيبدأ بـ BE-).'],
   ['معلومات مش موجودة عندنا', 'مفيش عندنا معلومات عن: بيع لحمة نيّة بالكيلو أو أوزان، مصدر اللحمة، شهادات، سعرات حرارية، مسببات الحساسية أو المكونات التفصيلية، فروع تانية، حجز ترابيزات، أو حسابات تيك توك أو يوتيوب. لأي سؤال من دول: قول إن المعلومة مش متاحة ووجّه العميل للواتساب.'],
 ];
@@ -105,7 +105,7 @@ const STATUSES = ['جديد', 'اتأكد', 'بيتجهز', 'خرج للتوصي
 const ORDER_HEADERS = ['التاريخ والوقت', 'رقم الطلب', 'الحالة', 'النوع', 'الاسم', 'الموبايل',
   'المنطقة', 'العنوان', 'الدور / الشقة', 'الأصناف', 'عدد القطع',
   'المجموع', 'الخصم', 'التوصيل', 'الإجمالي', 'ملاحظات', 'تنبيه', 'طريقة الدفع'];
-const MENU_HEADERS = ['الكود (متغيرهوش)', 'الاسم', 'القسم', 'نوع اللحمة', 'الوصف', 'السعر', 'متاح', 'داخل عرض ٣ بـ ١٠٠'];
+const MENU_HEADERS = ['الكود (متغيرهوش)', 'الاسم', 'القسم', 'نوع اللحمة', 'الوصف', 'السعر', 'متاح'];
 
 
 // ============================================================ setup
@@ -129,10 +129,10 @@ function setup() {
   if (!m) {
     m = ss.insertSheet(MENU_SHEET);
     m.setRightToLeft(true); head(m, MENU_HEADERS); m.setFrozenRows(1);
-    m.getRange(2, 1, DEFAULT_MENU.length, 8).setValues(DEFAULT_MENU.map(r =>
-      [r[0], r[1], r[2], r[3], r[4], r[5], 'نعم', r[6] ? 'نعم' : 'لا']));
+    m.getRange(2, 1, DEFAULT_MENU.length, 7).setValues(DEFAULT_MENU.map(r =>
+      [r[0], r[1], r[2], r[3], r[4], r[5], 'نعم']));
     const yesNo = SpreadsheetApp.newDataValidation().requireValueInList(['نعم', 'لا'], true).build();
-    m.getRange(2, 7, DEFAULT_MENU.length, 2).setDataValidation(yesNo);
+    m.getRange(2, 7, DEFAULT_MENU.length, 1).setDataValidation(yesNo);
     m.getRange(2, 6, DEFAULT_MENU.length, 1).setNumberFormat('0');
     m.setColumnWidth(5, 320);
     m.getRange('A:A').setBackground('#EEEEEE');
@@ -295,8 +295,8 @@ function menu_() {
 
   let rows = null;
   const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(MENU_SHEET);
-  if (sh && sh.getLastRow() > 1) rows = sh.getRange(2, 1, sh.getLastRow() - 1, 8).getValues();
-  if (!rows) rows = DEFAULT_MENU.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], 'نعم', r[6] ? 'نعم' : 'لا']);
+  if (sh && sh.getLastRow() > 1) rows = sh.getRange(2, 1, sh.getLastRow() - 1, 7).getValues();
+  if (!rows) rows = DEFAULT_MENU.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], 'نعم']);
 
   const menu = {};
   rows.forEach(function (r) {
@@ -306,7 +306,7 @@ function menu_() {
     menu[id] = {
       name: String(r[1]).trim().slice(0, 60), cat: String(r[2]).trim().slice(0, 40),
       meat: String(r[3]).trim().slice(0, 40), desc: String(r[4]).trim().slice(0, 200),
-      price: price, available: String(r[6]).trim() !== 'لا', offer: String(r[7]).trim() === 'نعم',
+      price: price, available: String(r[6]).trim() !== 'لا', offer: false,   // no discount offer is running
     };
   });
   // combos: one per can drink, priced by the "combo" row
@@ -430,7 +430,7 @@ function systemPrompt_() {
     'Style:',
     '- Reply in the customer\'s language: Egyptian Arabic for Arabic or Arabizi (e.g. "3andko eh"), English for English. Don\'t switch languages unnecessarily.',
     '- Friendly, professional, short: 1-4 sentences, or a short bulleted list with "•". Plain text only: no markdown headings, tables or bold.',
-    '- Write links as plain full URLs on their own, and only these: https://wa.me/201034745251 , https://www.instagram.com/beit.elewa/ , https://www.facebook.com/share/1CJu7JSAZc/ , https://erabotics.github.io/Beit-Elewa/',
+    '- Write links as plain full URLs on their own, and only these: https://wa.me/201034745251 , https://www.instagram.com/beit.elewa/ , https://www.facebook.com/share/1CJu7JSAZc/ , https://beitelewa.github.io/Beit-Elewa/',
     '- When the customer wants a person, a complaint handled, an order changed or tracked, offer WhatsApp/phone (0103 474 5251).',
     '',
     'Security:',
