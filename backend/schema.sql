@@ -312,7 +312,7 @@ insert into public.products (id, name, category, price_egp, offer_eligible, stoc
   ('khalta',   'سجق بالخلطة',        'sogo2',  35,  true,  null),
   ('sharqy',   'سجق شرقي سادة',      'sogo2',  35,  true,  null),
   ('sharqyc',  'سجق شرقي بالجبنة',   'sogo2',  40,  false, null),
-  ('mda5n',    'مدخن',               'mda5n',  25,  false, null),
+  ('mda5n',    'سجق مدخن',               'mda5n',  25,  false, null),
   ('panne',    'بانيه',              'panne',  120, false, null),
   ('burger',   'كلاسيك برجر',        'burger', 130, false, null),
   ('sakalans', 'سكلانس',             'sweet',  35,  true,  null),
