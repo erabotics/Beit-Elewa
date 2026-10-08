@@ -350,4 +350,26 @@ function initChat(){chatLog.forEach(renderMsg);renderChips();
   inp.addEventListener('input',grow);
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#chat').hidden)closeChat()})}
 
-capAddons();save();renderGrid();renderBoard();refresh();initTheme();initOpenNow();initChat();syncMenu();
+// ---------------------------------------------------------------- grill smoke (decorative; paused off-screen; off for reduced motion)
+function initGrill(){const sec=$('#grill'),cv=$('#smoke');if(!sec||!cv||!cv.getContext)return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){cv.hidden=true;return}
+  const ctx=cv.getContext('2d'),dpr=Math.min(1.5,window.devicePixelRatio||1);let W=0,H=0,parts=[],raf=0,run=false,last=0;
+  const puff=document.createElement('canvas');puff.width=puff.height=128;
+  {const p=puff.getContext('2d'),g=p.createRadialGradient(64,64,0,64,64,64);
+   g.addColorStop(0,'rgba(236,226,214,.55)');g.addColorStop(.5,'rgba(222,212,200,.2)');g.addColorStop(1,'rgba(210,200,190,0)');p.fillStyle=g;p.fillRect(0,0,128,128)}
+  const size=()=>{const r=sec.getBoundingClientRect();W=r.width;H=r.height;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)};
+  const spawn=pre=>({x:W*(.32+Math.random()*.62),y:H*(.62+Math.random()*.2),vx:(Math.random()-.5)*6,vy:-(10+Math.random()*14),
+    r:H*(.07+Math.random()*.08),gr:H*(.05+Math.random()*.05),life:pre?Math.random():0,dur:3+Math.random()*3,ph:Math.random()*6.28});
+  const count=()=>Math.round(Math.min(34,Math.max(12,W/42)));
+  const frame=t=>{raf=requestAnimationFrame(frame);const dt=Math.min(.05,last?(t-last)/1000:0);last=t;ctx.clearRect(0,0,W,H);
+    while(parts.length<count())parts.push(spawn(true)); if(parts.length>count())parts.length=count();
+    for(const q of parts){q.life+=dt/q.dur;if(q.life>=1){Object.assign(q,spawn(false));continue}
+      q.x+=(q.vx+Math.sin(t/1250+q.ph)*4)*dt;q.y+=q.vy*dt;const rr=q.r+q.gr*q.life*3;
+      ctx.globalAlpha=Math.sin(Math.PI*q.life)*.34;ctx.drawImage(puff,q.x-rr,q.y-rr,rr*2,rr*2)}
+    ctx.globalAlpha=1};
+  const start=()=>{if(run)return;run=true;last=0;size();raf=requestAnimationFrame(frame)}, stop=()=>{run=false;cancelAnimationFrame(raf)};
+  size();addEventListener('resize',size,{passive:true});
+  let seen=false;new IntersectionObserver(es=>{seen=es[0].isIntersecting;seen&&!document.hidden?start():stop()},{rootMargin:'120px'}).observe(sec);
+  document.addEventListener('visibilitychange',()=>{document.hidden?stop():seen&&start()})}
+
+capAddons();save();renderGrid();renderBoard();refresh();initTheme();initOpenNow();initChat();initGrill();syncMenu();

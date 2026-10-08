@@ -369,6 +369,15 @@ footer p{margin:0;opacity:.7;font-size:14px}
   .toast{bottom:100px}
 }
 @media (max-width:420px){.strip .hide-s{display:none}.logo-txt small{display:none}}
+/* grill strip above the footer: real photo + live smoke (canvas) + coal glow */
+.grill{position:relative;height:clamp(130px,20vw,280px);margin-top:80px;overflow:hidden;background:#140b06;isolation:isolate}
+.grill img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:60% 70%;transform:scale(1.03);animation:shimmer 2s ease-in-out infinite alternate}
+.grill-glow{position:absolute;inset:0;background:radial-gradient(60% 70% at 68% 95%,rgba(255,122,28,.38),transparent 70%);mix-blend-mode:screen;animation:coals 2s ease-in-out infinite alternate}
+.grill canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.grill::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(to bottom,var(--bg) 0%,rgba(0,0,0,0) 34%,rgba(0,0,0,0) 62%,var(--char) 100%),linear-gradient(to right,rgba(10,6,4,.6),rgba(10,6,4,0) 18%,rgba(10,6,4,0) 82%,rgba(10,6,4,.6))}
+.grill + footer{margin-top:0}
+@keyframes shimmer{from{transform:scale(1.03) translateY(0)}to{transform:scale(1.036) translateY(-1px) skewX(.12deg)}}
+@keyframes coals{from{opacity:.55}to{opacity:.95}}
 /* AI assistant */
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .chat-fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:55;display:flex;align-items:center;gap:10px;background:var(--char);color:var(--cream);border:0;border-radius:999px;padding:8px 18px 8px 8px;font-weight:800;font-size:15px;box-shadow:0 14px 32px -10px rgba(0,0,0,.55);transition:transform .2s}
