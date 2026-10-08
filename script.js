@@ -5,6 +5,12 @@ const BRANCH='زهراء مدينة نصر — موقف الحي العاشر';
 // Google Sheets order log: paste the Apps Script Web App URL (ends with /exec).
 // While this is the placeholder, nothing is sent and ordering works as before.
 const SHEETS_URL='PASTE_YOUR_WEB_APP_URL_HERE';
+// InstaPay: the option appears at checkout once `address` is filled in.
+// address: InstaPay address (e.g. name@instapay) or the mobile number/wallet that receives transfers.
+// name: account holder name shown to the customer (optional). link: InstaPay payment link https://ipn.eg/... (optional).
+const INSTAPAY={address:'',name:'',link:''};
+const INSTAPAY_ON=!!INSTAPAY.address.trim(), IP_LINK=/^https:\/\/ipn\.eg\/[\w\/-]+$/.test(INSTAPAY.link)?INSTAPAY.link:'';
+const payIP=()=>INSTAPAY_ON&&form.pay==='instapay';
 const ITEMS=[
  {id:'kebda',cat:'kebda',name:'كبدة',desc:'كبدة اسكندراني حراقة في عيش فينو',price:25,img:'kebda-v2',badge:'الأكثر طلباً'},
  {id:'khalta',cat:'sogo2',name:'سجق بالخلطة',desc:'سجق بالخلطة والفلفل الألوان',price:35,img:'khalta-v2'},
@@ -27,7 +33,7 @@ const ITEMS=[
  {id:'vdiet',cat:'drinks',name:'في كولا دايت',desc:'كانز ساقع — بدون سكر',price:20,img:'vcola-diet-wood',side:1,drink:1},
  {id:'v7lemon',cat:'drinks',name:'في ٧ ليمون نعناع',desc:'كانز ساقع بقطع الليمون',price:20,img:'v7-lemon-wood',side:1,drink:1},
  {id:'juice',cat:'drinks',name:'عصير جهينة برتقال',desc:'علبة ٢٣٥ مل ساقعة',price:15,img:'juice-wood',side:1,drink:1},
- {id:'water',cat:'drinks',name:'مياه',desc:'مياه معدنية اكوا دلتا',price:10,img:'water-wood',side:1,drink:1},
+ {id:'water',cat:'drinks',name:'مياه',desc:'مياه معدنية',price:10,img:'water-wood',side:1,drink:1},
  {id:'chipsy',cat:'drinks',name:'شيبسي',desc:'شطة حارة وليمون',price:15,img:'chipsy-wood',side:1,drink:1},
 ];
 // Combo: fries + a can for each sandwich, picked in the cart.
@@ -119,7 +125,7 @@ $('#qvAdd').onclick=()=>{setQty(qvItem.id,(cart[qvItem.id]||0)+qvQty);
   closeLayers();toast(`اتضاف ${qvItem.name} للسلة`)};
 
 // cart drawer
-const form={website:'',mode:'delivery',name:'',phone:'',area:Object.keys(ZONES)[0],address:'',floor:'',notes:''};
+const form={website:'',pay:'cash',mode:'delivery',name:'',phone:'',area:Object.keys(ZONES)[0],address:'',floor:'',notes:''};
 function modeHTML(){return `<div class="seg" role="radiogroup" aria-label="طريقة الاستلام">
   <button type="button" role="radio" data-mode="delivery" aria-checked="${form.mode==='delivery'}">توصيل</button>
   <button type="button" role="radio" data-mode="pickup" aria-checked="${form.mode==='pickup'}">استلام من الفرع</button></div>`}
@@ -145,7 +151,7 @@ function logOrder(t){
   const pk=form.mode==='pickup';
   const payload={orderId,mode:form.mode,name:form.name.trim(),phone:form.phone.replace(/\D/g,''),
     area:pk?'':form.area,address:pk?'':form.address.trim(),floor:pk?'':form.floor.trim(),notes:form.notes.trim(),
-    items:Object.entries(cart).map(([id,qty])=>({id,qty})),clientTotal:t.total};
+    items:Object.entries(cart).map(([id,qty])=>({id,qty})),clientTotal:t.total,pay:payIP()?'instapay':'cash'};
   // text/plain + no-cors = a "simple" request Apps Script accepts; keepalive lets it finish while WhatsApp opens.
   fetch(SHEETS_URL,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)})
     .catch(()=>{loggedId=null});
@@ -155,7 +161,7 @@ function orderText(t){const L=Object.entries(cart).map(([k,q])=>`• ${BY[k].nam
    form.mode==='pickup'?`🏪 استلام من الفرع (${BRANCH})`:'🛵 توصيل',
    `الاسم: ${form.name}`,`الموبايل: ${form.phone}`,
    ...(form.mode==='pickup'?[]:[`المنطقة: ${form.area}`,`العنوان: ${form.address}${form.floor?' — '+form.floor:''}`]),
-   form.notes?`ملاحظات: ${form.notes}`:null,'الدفع: كاش عند الاستلام'].filter(x=>x!==null).join('\n')}
+   form.notes?`ملاحظات: ${form.notes}`:null,payIP()?'الدفع: InstaPay — هبعت صورة التحويل هنا':'الدفع: كاش عند الاستلام'].filter(x=>x!==null).join('\n')}
 function renderDrawer(){
   const t=calc(),B=$('#drawerBody'),F=$('#drawerFoot');
   if(!t.count&&step!=='done'){step='cart';$('#drawerTitle').textContent='سلة الطلب';
@@ -185,11 +191,12 @@ function renderDrawer(){
       <div class="field"><label for="f-floor">الدور / الشقة</label><input id="f-floor" name="floor" maxlength="60" placeholder="مثال: الدور ٣ شقة ٦" value="${esc(form.floor)}"></div>`}
       <div class="field"><label for="f-notes">ملاحظات على الطلب</label><textarea id="f-notes" name="notes" rows="2" maxlength="300" placeholder="مثال: بدون كاتشاب، حراق زيادة">${esc(form.notes)}</textarea></div>
       <div class="hp" aria-hidden="true"><label for="f-website">Website</label><input id="f-website" name="website" tabindex="-1" autocomplete="off"></div>
-      <div class="pay"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg> الدفع كاش عند الاستلام</div>
+      ${INSTAPAY_ON?`<fieldset class="paysel"><legend>طريقة الدفع</legend><label class="payopt"><input type="radio" name="pay" value="cash"${form.pay!=='instapay'?' checked':''}> كاش عند الاستلام</label><label class="payopt"><input type="radio" name="pay" value="instapay"${form.pay==='instapay'?' checked':''}> InstaPay (تحويل قبل التجهيز)</label></fieldset>`:`<div class="pay"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg> الدفع كاش عند الاستلام</div>`}
      </form>`;
     F.innerHTML=totalsHTML(t)+`<button class="btn btn-red" type="submit" form="coForm">راجع الطلب</button>`;
     $('#back').onclick=()=>{step='cart';renderDrawer()};
-    $('#coForm').addEventListener('input',e=>{if(e.target.name){form[e.target.name]=e.target.name==='area'&&!Object.prototype.hasOwnProperty.call(ZONES,e.target.value)?Object.keys(ZONES)[0]:e.target.value;e.target.closest('.field').classList.remove('bad')}
+    $('#coForm').addEventListener('input',e=>{if(e.target.name==='pay'){form.pay=e.target.value==='instapay'?'instapay':'cash';return}
+      if(e.target.name){form[e.target.name]=e.target.name==='area'&&!Object.prototype.hasOwnProperty.call(ZONES,e.target.value)?Object.keys(ZONES)[0]:e.target.value;e.target.closest('.field').classList.remove('bad')}
       if(e.target.name==='area'){$('#drawerFoot').querySelector('.tot')&&renderFormFoot()}});
     const renderFormFoot=()=>{const b=F.querySelector('button[form]');F.innerHTML=totalsHTML(calc());F.appendChild(b)};
     $('#coForm').addEventListener('submit',e=>{e.preventDefault();let ok=true;
@@ -201,12 +208,14 @@ function renderDrawer(){
     const txt=orderText(t);
     B.innerHTML=`<button class="back" id="back">→ تعديل البيانات</button>
       <p style="margin:14px 0 10px">آخر خطوة: افتح واتساب واضغط إرسال. الطلب بيتأكد لما توصلنا الرسالة ونرد عليك.</p>
+      ${payIP()?`<div class="ipbox"><b>ادفع بـ InstaPay</b><span>حوّل <b class="num">${ar(t.total)} ج</b> على:</span><div class="iprow"><span class="ipaddr" dir="ltr">${esc(INSTAPAY.address)}</span><button class="btn btn-ghost" id="ipCopy" type="button">انسخ</button></div>${INSTAPAY.name?`<span>باسم: ${esc(INSTAPAY.name)}</span>`:''}${IP_LINK?`<a class="btn btn-ghost" href="${esc(IP_LINK)}" target="_blank" rel="noopener">افتح InstaPay</a>`:''}<span>بعد التحويل ابعت صورة التحويل في نفس محادثة الواتساب مع رقم الطلب <b dir="ltr">${esc(orderId)}</b>. الطلب بيتأكد لما نتأكد من وصول التحويل.</span></div>`:''}
       <div class="msg" id="msg">${esc(txt)}</div>
       <button class="btn btn-ghost" id="copy" style="margin-top:10px;width:100%">انسخ نص الطلب</button>`;
     F.innerHTML=`<div class="tot grand"><span>الإجمالي</span><span class="num">${ar(t.total)} ج</span></div>
       <a class="btn wa" id="waBtn" href="https://wa.me/${PHONE_WA}?text=${encodeURIComponent(txt)}" target="_blank" rel="noopener">افتح واتساب وابعت الطلب</a>
       <span style="font-size:13px;color:var(--muted);text-align:center">أو كلمنا على <span class="num" style="direction:ltr;user-select:all">0103 474 5251</span></span>`;
     $('#back').onclick=()=>{orderId=null;step='form';renderDrawer()};
+    const ipc=$('#ipCopy'); if(ipc) ipc.onclick=()=>{navigator.clipboard.writeText(INSTAPAY.address).then(()=>toast('اتنسخ عنوان InstaPay')).catch(()=>toast(INSTAPAY.address))};
     $('#waBtn').addEventListener('click',()=>logOrder(t));
     $('#copy').onclick=()=>{navigator.clipboard.writeText(txt).then(()=>toast('اتنسخ نص الطلب')).catch(()=>{const r=document.createRange();r.selectNodeContents($('#msg'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('النص متحدد — انسخه')})};
   }
@@ -302,7 +311,7 @@ function localAnswer(text){const t=norm(text), ar=isAr(text), has=re=>re.test(t)
   if(has(/مواعيد|بتفتحو|تفتحو|بتقفلو|تقفلو|مفتوحين|امتي|hours|open|close|timing|mawa3id/))return ar?'مفتوحين كل يوم من ١١ الصبح لحد ٣ الفجر.':'We are open every day from 11 AM to 3 AM.';
   if(has(/توصيل|دليفري|ديليفري|بتوصلو|توصلو|delivery|deliver|tawsil/))return ar?`أيوه، بنوصّل لـ ${zones} بس. ولو هتستلم من الفرع (زهراء مدينة نصر — موقف الحي العاشر) مفيش مصاريف توصيل. الدفع كاش عند الاستلام.`:`Yes, we deliver to ${zones} only. Pickup from the branch (Zahraa Nasr City, El Hay El Asher parking) has no delivery fee. Payment is cash on delivery.`;
   if(has(/فين|عنوان|فرع|فروع|مكان|لوكيشن|location|address|branch|where are/))return ar?'عندنا فرع واحد في زهراء مدينة نصر — موقف الحي العاشر.':'We have one branch: Zahraa Nasr City, El Hay El Asher parking.';
-  if(has(/دفع|فيزا|كاش|كارت|انستاباي|pay|card|cash|visa/))return ar?'الدفع كاش عند الاستلام. مفيش دفع أونلاين على الموقع.':'Payment is cash on delivery or pickup. There is no online payment on the website.';
+  if(has(/دفع|فيزا|كاش|كارت|انستاباي|pay|card|cash|visa/))return INSTAPAY_ON?(ar?`الدفع كاش عند الاستلام، أو InstaPay: بتحوّل الإجمالي على ${INSTAPAY.address} وتبعت صورة التحويل على واتساب مع رقم الطلب.`:`You can pay cash on delivery or by InstaPay: transfer the total to ${INSTAPAY.address} and send the transfer screenshot on WhatsApp with your order number.`):(ar?'الدفع كاش عند الاستلام. مفيش دفع أونلاين على الموقع.':'Payment is cash on delivery or pickup. There is no online payment on the website.');
   if(has(/عرض|عروض|خصم|offer|deal|discount|promo/))return ar?`عرض الأسبوع: أي ٣ سندوتشات من سندوتشات الـ ٣٥ جنيه (${offerItems}) بـ ١٠٠ جنيه، والخصم بيتحسب لوحده في السلة. البرجر والبانيه مش داخلين في العرض.`:`This week's offer: any 3 of the 35 EGP sandwiches (${offerItems}) for 100 EGP; the discount is applied automatically in the cart. Burger and panne are not included.`;
   if(has(/كومبو|combo|اضافات|اضافه|زياده|extra|add.?on/))return ar?`ممكن تخلي أي ساندوتش كومبو بـ ${COMBO_PRICE} ج (بطاطس + كانز تختاره) من السلة. وفيه جبنة زيادة بـ ${BY.cheese.price} ج لأي ساندوتش، وقطعة برجر زيادة بـ ${BY.patty.price} ج مع البرجر.`:`Any sandwich can be a combo for ${COMBO_PRICE} EGP (fries + a can of your choice), added from the cart. Extra cheese is ${BY.cheese.price} EGP, and an extra burger patty is ${BY.patty.price} EGP with the burger.`;
   if(has(/شوي|مشوي|جريل|grill|bbq|shawy|mashwy/)){const g=ITEMS.filter(i=>!i.hidden&&/مشوي/.test(i.desc));
